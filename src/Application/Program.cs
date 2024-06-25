@@ -6,6 +6,8 @@ builder.Services.AddControllers()
     .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
 
 builder.Services.ConfigureLoggerService();
+builder.Services.ConfigureSessionService();
+builder.Services.ConfigureRepositoryService();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -20,6 +22,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.PopulateSessionRepository();
 }
 
 app.UseHttpsRedirection();

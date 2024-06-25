@@ -1,5 +1,6 @@
 using Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Service.Contracts;
 
 namespace Presentation;
 
@@ -8,9 +9,11 @@ namespace Presentation;
 public class SessionsController : ControllerBase
 {
     private readonly ILoggerManager _logger;
+    private readonly ISessionService _service;
 
-    public SessionsController(ILoggerManager logger)
+    public SessionsController(ILoggerManager logger, ISessionService sessionService)
     {
         _logger = logger;
+        _service = sessionService;
     }
 }
