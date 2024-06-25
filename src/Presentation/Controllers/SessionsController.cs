@@ -1,4 +1,5 @@
 using Contracts;
+using Entities.Sessions;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 
@@ -15,5 +16,21 @@ public class SessionsController : ControllerBase
     {
         _logger = logger;
         _service = sessionService;
+    }
+
+    [HttpGet("{sessionName}", Name = "SessionByName")]
+    public IActionResult GetSessionByName(string sessionName)
+    {
+        var session = _service.GetSession(sessionName);
+
+        return Ok(session);
+    }
+
+    [HttpPost]
+    public IActionResult CreateSession([FromBody] SessionForCreationDto session)
+    {
+        var createdSession = _service.CreateSession(session);
+
+        return CreatedAtRoute("SessionByName", new { sessionName = session.Name }, createdSession);
     }
 }

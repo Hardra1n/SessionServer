@@ -14,11 +14,12 @@ public class SessionService : ISessionService
 
     public Session CreateSession(SessionForCreationDto session)
     {
-        throw new NotImplementedException();
+        return _repository.CreateSession(session.ToSession());
     }
 
     public Session GetSession(string sessionName)
     {
-        throw new NotImplementedException();
+        var session = _repository.GetSession(sessionName);
+        return session;
     }
 }
