@@ -25,4 +25,9 @@ public class Session
     {
         return Name.ToLower().GetHashCode();
     }
+
+    public void Copy(Session session)
+    {
+        SessionState = session.SessionState;
+    }
 }

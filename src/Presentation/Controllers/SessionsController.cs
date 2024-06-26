@@ -33,4 +33,12 @@ public class SessionsController : ControllerBase
 
         return CreatedAtRoute("SessionByName", new { sessionName = session.Name }, createdSession);
     }
+
+    [HttpPut("{sessionName}")]
+    public IActionResult UpdateSession(string sessionName, [FromBody] SessionForUpdateDto session)
+    {
+        _service.UpdateSession(sessionName, session);
+
+        return NoContent();
+    }
 }

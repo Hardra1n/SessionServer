@@ -12,14 +12,20 @@ public class SessionService : ISessionService
         _repository = sessionRepository;
     }
 
-    public Session CreateSession(SessionForCreationDto session)
+    public Session CreateSession(SessionForCreationDto sessionDto)
     {
-        return _repository.CreateSession(session.ToSession());
+        return _repository.CreateSession(sessionDto.ToSession());
     }
 
     public Session GetSession(string sessionName)
     {
         var session = _repository.GetSession(sessionName);
         return session;
+    }
+
+    public void UpdateSession(string sessionName, SessionForUpdateDto sessionDto)
+    {
+        var sessionToUpdate = _repository.GetSession(sessionName);
+        sessionToUpdate.Copy(sessionDto.ToSession());
     }
 }

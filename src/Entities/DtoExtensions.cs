@@ -8,4 +8,12 @@ public static class DtoExtensions
     {
         return new Session(session.Name);
     }
+
+    public static Session ToSession(this SessionForUpdateDto session)
+    {
+        return new Session(string.Empty)
+        {
+            SessionState = session.SessionState
+        };
+    }
 }

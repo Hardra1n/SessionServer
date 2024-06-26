@@ -6,4 +6,5 @@ public interface ISessionService
 {
     Session GetSession(string sessionName);
     Session CreateSession(SessionForCreationDto session);
+    void UpdateSession(string sessionName, SessionForUpdateDto session);
 }
