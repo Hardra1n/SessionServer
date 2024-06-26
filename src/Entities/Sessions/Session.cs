@@ -2,7 +2,7 @@ namespace Entities.Sessions;
 
 public class Session
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; init; }
     public SessionState SessionState { get; set; }
 
     public Session(string name)
