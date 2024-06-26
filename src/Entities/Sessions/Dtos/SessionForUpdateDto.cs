@@ -1,3 +1,3 @@
 using Entities.Sessions;
 
-public record SessionForUpdateDto(SessionState SessionState);
+public record SessionForUpdateDto(Guid ExpirationToken, SessionState SessionState);

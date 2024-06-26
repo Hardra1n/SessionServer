@@ -9,9 +9,9 @@ public static class DtoExtensions
         return new Session(session.Name);
     }
 
-    public static Session ToSession(this SessionForUpdateDto session)
+    public static Session ToSession(this SessionForUpdateDto session, string sessionName)
     {
-        return new Session(string.Empty)
+        return new Session(sessionName, session.ExpirationToken)
         {
             SessionState = session.SessionState
         };

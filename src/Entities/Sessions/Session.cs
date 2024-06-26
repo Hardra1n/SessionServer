@@ -1,14 +1,30 @@
 namespace Entities.Sessions;
 
-public class Session
+public class Session : IClonable<Session>, IExpirable<Guid>
 {
-    public string Name { get; init; }
-    public SessionState SessionState { get; set; }
-
     public Session(string name)
     {
         Name = name;
+        CalculateExpirationToken();
     }
+
+    public Session(string name, Guid expirationToken)
+    {
+        Name = name;
+        ExpirationToken = expirationToken;
+    }
+
+
+    public Guid ExpirationToken { get; private set; }
+
+    public string Name { get; init; }
+
+    public SessionState SessionState { get; set; }
+
+
+    public void CalculateExpirationToken() => ExpirationToken = Guid.NewGuid();
+
+    public bool IsExpired(Guid token) => !ExpirationToken.Equals(token);
 
     public override bool Equals(object? obj)
     {
@@ -28,6 +44,13 @@ public class Session
 
     public void Copy(Session session)
     {
-        SessionState = session.SessionState;
+        ExpirationToken = session.ExpirationToken;
+    }
+
+    public Session Clone()
+    {
+        var session = new Session(Name, ExpirationToken);
+        session.Copy(this);
+        return session;
     }
 }

@@ -16,7 +16,7 @@ public class SessionRepository : ISessionRepository
         {
             if (!_sessions.Add(session))
                 throw new SessionAlreadyExistException();
-            return session;
+            return session.Clone();
         }
     }
 
@@ -27,7 +27,29 @@ public class SessionRepository : ISessionRepository
         {
             throw new SessionNotFoundException(sessionName);
         }
-        return session;
+
+        return session.Clone();
+    }
+
+    public Session UpdateSession(Session updateSession)
+    {
+        if (!_sessions.TryGetValue(updateSession, out Session? session)
+           || session == null)
+        {
+            throw new SessionNotFoundException(updateSession.Name);
+        }
+
+        lock (session)
+        {
+            if (session.IsExpired(updateSession.ExpirationToken))
+            {
+                throw new SessionExpiredException(updateSession.ExpirationToken);
+            }
+            session.Copy(updateSession);
+            session.CalculateExpirationToken();
+        }
+
+        return session.Clone();
     }
 }
 

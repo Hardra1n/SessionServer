@@ -1,6 +1,7 @@
 using Entities.Sessions;
 using Entities;
 using Service.Contracts;
+using System.Collections.Concurrent;
 
 namespace Service;
 public class SessionService : ISessionService
@@ -25,7 +26,6 @@ public class SessionService : ISessionService
 
     public void UpdateSession(string sessionName, SessionForUpdateDto sessionDto)
     {
-        var sessionToUpdate = _repository.GetSession(sessionName);
-        sessionToUpdate.Copy(sessionDto.ToSession());
+        _repository.UpdateSession(sessionDto.ToSession(sessionName));
     }
 }
