@@ -22,34 +22,38 @@ public class SessionRepository : ISessionRepository
 
     public Session GetSession(string sessionName)
     {
-        if (!_sessions.TryGetValue(new Session(sessionName), out Session? session)
-           || session == null)
+        lock (_locker)
         {
-            throw new SessionNotFoundException(sessionName);
-        }
+            if (!_sessions.TryGetValue(new Session(sessionName), out Session? session)
+               || session == null)
+            {
+                throw new SessionNotFoundException(sessionName);
+            }
 
-        return session.Clone();
+            return session.Clone();
+        }
     }
 
     public Session UpdateSession(Session updateSession)
     {
-        if (!_sessions.TryGetValue(updateSession, out Session? session)
-           || session == null)
+        lock (_locker)
         {
-            throw new SessionNotFoundException(updateSession.Name);
-        }
+            if (!_sessions.TryGetValue(updateSession, out Session? session)
+               || session == null)
+            {
+                throw new SessionNotFoundException(updateSession.Name);
+            }
 
-        lock (session)
-        {
             if (session.IsExpired(updateSession.ExpirationToken))
             {
                 throw new SessionExpiredException(updateSession.ExpirationToken);
             }
             session.Copy(updateSession);
             session.CalculateExpirationToken();
+
+            return session.Clone();
         }
 
-        return session.Clone();
     }
 }
 
