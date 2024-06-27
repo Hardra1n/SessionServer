@@ -12,12 +12,6 @@ public class Session : IClonable<Session>, IExpirable<Guid>
         CalculateExpirationToken();
     }
 
-    public Session(string name, Guid expirationToken)
-    {
-        Name = name;
-        ExpirationToken = expirationToken;
-    }
-
 
     public string Name { get; init; }
     public Guid ExpirationToken { get; private set; }
@@ -31,7 +25,6 @@ public class Session : IClonable<Session>, IExpirable<Guid>
             ExecuteOnPropertyChange();
         }
     }
-
 
 
     private void ExecuteOnPropertyChange()
@@ -67,7 +60,10 @@ public class Session : IClonable<Session>, IExpirable<Guid>
 
     public Session Clone()
     {
-        var session = new Session(Name, ExpirationToken);
+        var session = new Session(Name)
+        {
+            ExpirationToken = ExpirationToken
+        };
         session.Copy(this);
         return session;
     }

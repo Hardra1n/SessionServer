@@ -11,7 +11,7 @@ public static class DtoExtensions
 
     public static Session ToSession(this SessionForUpdateDto session, string sessionName)
     {
-        return new Session(sessionName, session.ExpirationToken)
+        return new Session(sessionName)
         {
             SessionState = session.SessionState
         };

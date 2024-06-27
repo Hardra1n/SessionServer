@@ -47,7 +47,7 @@ public class SessionRepositoryCleaner : IHostedService, IDisposable
             {
                 try
                 {
-                    _repository.DeleteSession(session);
+                    _repository.DeleteSession(session.ExpirationToken, session);
                     _logger.LogInfo($"Session {session.Name} was cleaned, expiration time " +
                         $"{conditionalDate} lastmodified {session.LastTimeModified}");
                 }

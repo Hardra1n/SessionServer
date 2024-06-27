@@ -4,7 +4,7 @@ public interface ISessionRepository
 {
     Session CreateSession(Session session);
     Session GetSession(string sessionName);
-    Session UpdateSession(Session updateSession);
-    void DeleteSession(Session session);
+    Session UpdateSession(Guid expirationToken, Session updateSession);
+    void DeleteSession(Guid expirationToken, Session session);
     IReadOnlyCollection<Session> GetAllSessions();
 }

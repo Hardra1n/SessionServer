@@ -27,6 +27,6 @@ public class SessionService : ISessionService
 
     public void UpdateSession(string sessionName, SessionForUpdateDto sessionDto)
     {
-        _repository.UpdateSession(sessionDto.ToSession(sessionName));
+        _repository.UpdateSession(sessionDto.ExpirationToken, sessionDto.ToSession(sessionName));
     }
 }

@@ -11,26 +11,12 @@ public class SessionRepository : ISessionRepository
         _sessions = new HashSet<Session>();
     }
 
-    public Session CreateSession(Session session)
+
+    public IReadOnlyCollection<Session> GetAllSessions()
     {
         lock (_locker)
         {
-            if (!_sessions.Add(session))
-                throw new SessionAlreadyExistException();
-            return session.Clone();
-        }
-    }
-
-    public void DeleteSession(Session session)
-    {
-        lock (_locker)
-        {
-            var sessionToDelete = CheckIfSessionExistsAndNotNull(session);
-
-            if (sessionToDelete.IsExpired(session.ExpirationToken))
-                throw new SessionExpiredException(session.ExpirationToken);
-            if (_sessions.Remove(session))
-                throw new SessionNotFoundException(session.Name);
+            return new ReadOnlyCollection<Session>(_sessions.ToList());
         }
     }
 
@@ -44,20 +30,42 @@ public class SessionRepository : ISessionRepository
         }
     }
 
-    public Session UpdateSession(Session updateSession)
+    public Session CreateSession(Session session)
+    {
+        lock (_locker)
+        {
+            if (!_sessions.Add(session))
+                throw new SessionAlreadyExistException();
+            return session.Clone();
+        }
+    }
+
+    public Session UpdateSession(Guid expirationToken, Session updateSession)
     {
         lock (_locker)
         {
             var session = CheckIfSessionExistsAndNotNull(updateSession);
+            CheckIfSessionExpired(expirationToken, updateSession);
 
-            if (session.IsExpired(updateSession.ExpirationToken))
-            {
-                throw new SessionExpiredException(updateSession.ExpirationToken);
-            }
             session.Copy(updateSession);
 
             return session.Clone();
+
         }
+    }
+
+    public void DeleteSession(Guid expirationToken, Session session)
+    {
+        lock (_locker)
+        {
+            var sessionToDelete = CheckIfSessionExistsAndNotNull(session);
+            CheckIfSessionExpired(expirationToken, sessionToDelete);
+
+            if (_sessions.Remove(session))
+                throw new SessionNotFoundException(session.Name);
+        }
+
+
     }
 
     private Session CheckIfSessionExistsAndNotNull(Session session)
@@ -74,12 +82,10 @@ public class SessionRepository : ISessionRepository
         return sessionToReturn;
     }
 
-    public IReadOnlyCollection<Session> GetAllSessions()
+    private void CheckIfSessionExpired(Guid expirationToken, Session session)
     {
-        lock (_locker)
-        {
-            return new ReadOnlyCollection<Session>(_sessions.ToList());
-        }
+        if (session.IsExpired(expirationToken))
+            throw new SessionExpiredException(expirationToken);
     }
 }
 
