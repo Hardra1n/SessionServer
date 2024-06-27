@@ -20,15 +20,24 @@ public class SessionRepository : ISessionRepository
         }
     }
 
+    public void DeleteSession(Session session)
+    {
+        lock (_locker)
+        {
+            var sessionToDelete = CheckIfSessionExistsAndNotNull(session);
+
+            if (sessionToDelete.IsExpired(session.ExpirationToken))
+                throw new SessionExpiredException(session.ExpirationToken);
+            if (_sessions.Remove(session))
+                throw new SessionNotFoundException(session.Name);
+        }
+    }
+
     public Session GetSession(string sessionName)
     {
         lock (_locker)
         {
-            if (!_sessions.TryGetValue(new Session(sessionName), out Session? session)
-               || session == null)
-            {
-                throw new SessionNotFoundException(sessionName);
-            }
+            var session = CheckIfSessionExistsAndNotNull(new Session(sessionName));
 
             return session.Clone();
         }
@@ -38,11 +47,7 @@ public class SessionRepository : ISessionRepository
     {
         lock (_locker)
         {
-            if (!_sessions.TryGetValue(updateSession, out Session? session)
-               || session == null)
-            {
-                throw new SessionNotFoundException(updateSession.Name);
-            }
+            var session = CheckIfSessionExistsAndNotNull(updateSession);
 
             if (session.IsExpired(updateSession.ExpirationToken))
             {
@@ -53,7 +58,20 @@ public class SessionRepository : ISessionRepository
 
             return session.Clone();
         }
+    }
 
+    private Session CheckIfSessionExistsAndNotNull(Session session)
+    {
+        if (session == null)
+        {
+            throw new SessionNullPointerException();
+        }
+
+        if (!_sessions.TryGetValue(session, out Session? sessionToReturn))
+        {
+            throw new SessionNotFoundException(session.Name);
+        }
+        return sessionToReturn;
     }
 }
 
