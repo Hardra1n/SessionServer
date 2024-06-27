@@ -6,4 +6,5 @@ public interface ISessionRepository
     Session GetSession(string sessionName);
     Session UpdateSession(Session updateSession);
     void DeleteSession(Session session);
+    IReadOnlyCollection<Session> GetAllSessions();
 }

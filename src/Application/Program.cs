@@ -13,7 +13,7 @@ builder.Services.ConfigureRepositoryService();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+builder.Services.ConfigureHostedServices();
 
 var app = builder.Build();
 

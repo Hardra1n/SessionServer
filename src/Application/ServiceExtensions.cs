@@ -13,4 +13,9 @@ public static class ServiceExtensions
 
     public static void ConfigureRepositoryService(this IServiceCollection services)
         => services.AddSingleton<ISessionRepository, SessionRepository>();
+
+    public static void ConfigureHostedServices(this IServiceCollection services)
+    {
+        services.AddHostedService<SessionRepositoryCleaner>();
+    }
 }

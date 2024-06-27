@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Entities.Sessions;
 
 public class SessionRepository : ISessionRepository
@@ -54,7 +55,6 @@ public class SessionRepository : ISessionRepository
                 throw new SessionExpiredException(updateSession.ExpirationToken);
             }
             session.Copy(updateSession);
-            session.CalculateExpirationToken();
 
             return session.Clone();
         }
@@ -72,6 +72,14 @@ public class SessionRepository : ISessionRepository
             throw new SessionNotFoundException(session.Name);
         }
         return sessionToReturn;
+    }
+
+    public IReadOnlyCollection<Session> GetAllSessions()
+    {
+        lock (_locker)
+        {
+            return new ReadOnlyCollection<Session>(_sessions.ToList());
+        }
     }
 }
 
