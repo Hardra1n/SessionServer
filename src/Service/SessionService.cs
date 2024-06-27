@@ -13,15 +13,16 @@ public class SessionService : ISessionService
         _repository = sessionRepository;
     }
 
-    public Session CreateSession(SessionForCreationDto sessionDto)
+    public SessionForOutDto CreateSession(SessionForCreationDto sessionDto)
     {
-        return _repository.CreateSession(sessionDto.ToSession());
+        var session = _repository.CreateSession(sessionDto.ToSession());
+        return session.ToSessionForOutDto();
     }
 
-    public Session GetSession(string sessionName)
+    public SessionForOutDto GetSession(string sessionName)
     {
         var session = _repository.GetSession(sessionName);
-        return session;
+        return session.ToSessionForOutDto();
     }
 
     public void UpdateSession(string sessionName, SessionForUpdateDto sessionDto)

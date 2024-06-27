@@ -16,4 +16,9 @@ public static class DtoExtensions
             SessionState = session.SessionState
         };
     }
+
+    public static SessionForOutDto ToSessionForOutDto(this Session session)
+    {
+        return new SessionForOutDto(session.Name, session.ExpirationToken, session.SessionState);
+    }
 }
