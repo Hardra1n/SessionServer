@@ -1,5 +1,7 @@
 using Entities.Sessions;
 
+namespace Contracts;
+
 public interface ISessionRepository
 {
     Session CreateSession(Session session);

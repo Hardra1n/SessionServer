@@ -1,3 +1,4 @@
+using Contracts;
 using Entities.Sessions;
 
 public static class RepositoryExtensions

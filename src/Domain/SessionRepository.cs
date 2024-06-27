@@ -1,5 +1,8 @@
 using System.Collections.ObjectModel;
+using Contracts;
 using Entities.Sessions;
+
+namespace Domain;
 
 public class SessionRepository : ISessionRepository
 {

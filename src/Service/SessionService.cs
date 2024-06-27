@@ -1,9 +1,10 @@
 using Entities.Sessions;
 using Entities;
 using Service.Contracts;
-using System.Collections.Concurrent;
+using Contracts;
 
 namespace Service;
+
 public class SessionService : ISessionService
 {
     private readonly ISessionRepository _repository;

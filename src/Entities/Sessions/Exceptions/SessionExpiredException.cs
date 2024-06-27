@@ -1,3 +1,7 @@
+using Entities.Exceptions;
+
+namespace Entities.Sessions;
+
 public class SessionExpiredException : BadRequestException
 {
     public SessionExpiredException(Guid guid)

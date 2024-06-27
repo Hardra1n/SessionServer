@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 namespace Entities.Sessions;
 
 public class Session : IClonable<Session>, IExpirable<Guid>
