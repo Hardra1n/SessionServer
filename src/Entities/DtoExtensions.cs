@@ -6,7 +6,7 @@ public static class DtoExtensions
 {
     public static Session ToSession(this SessionForCreationDto session)
     {
-        return new Session(session.Name);
+        return new SearchSession(session.Name, session.NumberOfUsers, TimeSpan.FromSeconds(session.SearchingPeriodSeconds));
     }
 
     public static Session ToSession(this SessionForUpdateDto session, string sessionName)

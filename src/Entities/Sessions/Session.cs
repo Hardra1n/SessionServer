@@ -17,7 +17,7 @@ public class Session : IClonable<Session>, IExpirable<Guid>
     public int NumberOfUsers { get; init; }
     public Guid ExpirationToken { get; private set; }
     public DateTime LastTimeModified { get; private set; } = DateTime.Now;
-    public SessionState SessionState
+    public virtual SessionState SessionState
     {
         get => _sessionState;
         set
@@ -28,7 +28,7 @@ public class Session : IClonable<Session>, IExpirable<Guid>
     }
 
 
-    private void ExecuteOnPropertyChange()
+    protected void ExecuteOnPropertyChange()
     {
         CalculateExpirationToken();
         LastTimeModified = DateTime.Now;
