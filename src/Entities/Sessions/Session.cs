@@ -53,16 +53,14 @@ public class Session : IClonable<Session>, IExpirable<Guid>
 
     public void Copy(Session session)
     {
-        ExpirationToken = session.ExpirationToken;
+        SessionState = session.SessionState;
     }
 
     public Session Clone()
     {
-        var session = new Session(Name)
-        {
-            ExpirationToken = ExpirationToken
-        };
+        var session = new Session(Name);
         session.Copy(this);
+        session.ExpirationToken = ExpirationToken;
         return session;
     }
 }

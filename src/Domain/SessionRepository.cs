@@ -7,11 +7,13 @@ namespace Domain;
 public class SessionRepository : ISessionRepository
 {
     private object _locker = new object();
+    private ILoggerManager _logger;
     private HashSet<Session> _sessions;
 
-    public SessionRepository()
+    public SessionRepository(ILoggerManager logger)
     {
         _sessions = new HashSet<Session>();
+        _logger = logger;
     }
 
 
@@ -48,11 +50,11 @@ public class SessionRepository : ISessionRepository
         lock (_locker)
         {
             var session = CheckIfSessionExistsAndNotNull(updateSession);
-            CheckIfSessionExpired(expirationToken, updateSession);
+            CheckIfSessionExpired(expirationToken, session);
 
             session.Copy(updateSession);
 
-            return session.Clone();
+            return session;
 
         }
     }
@@ -64,11 +66,9 @@ public class SessionRepository : ISessionRepository
             var sessionToDelete = CheckIfSessionExistsAndNotNull(session);
             CheckIfSessionExpired(expirationToken, sessionToDelete);
 
-            if (_sessions.Remove(session))
+            if (!_sessions.Remove(sessionToDelete))
                 throw new SessionNotFoundException(session.Name);
         }
-
-
     }
 
     private Session CheckIfSessionExistsAndNotNull(Session session)
