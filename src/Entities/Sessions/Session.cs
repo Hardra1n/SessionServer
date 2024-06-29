@@ -4,14 +4,17 @@ public class Session : IClonable<Session>, IExpirable<Guid>
 {
     private SessionState _sessionState;
 
-    public Session(string name)
+    public Session(string name) : this(name, 1) { }
+    public Session(string name, int numberOfUsers)
     {
         Name = name;
+        NumberOfUsers = numberOfUsers;
         CalculateExpirationToken();
     }
 
 
     public string Name { get; init; }
+    public int NumberOfUsers { get; init; }
     public Guid ExpirationToken { get; private set; }
     public DateTime LastTimeModified { get; private set; } = DateTime.Now;
     public SessionState SessionState
@@ -58,7 +61,7 @@ public class Session : IClonable<Session>, IExpirable<Guid>
 
     public Session Clone()
     {
-        var session = new Session(Name);
+        var session = new Session(Name, NumberOfUsers);
         session.Copy(this);
         session.ExpirationToken = ExpirationToken;
         return session;
