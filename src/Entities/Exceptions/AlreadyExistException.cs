@@ -1,6 +1,6 @@
 namespace Entities.Exceptions;
 
-public class AlreadyExistException : Exception
+public class AlreadyExistException : BadRequestException
 {
     public AlreadyExistException(string message) : base(message) { }
 }
