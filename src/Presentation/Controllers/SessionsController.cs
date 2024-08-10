@@ -31,6 +31,8 @@ public class SessionsController : ControllerBase
     {
         var createdSession = _service.CreateSession(session);
 
+        _logger.LogInfo($"Session {createdSession} is created");
+
         return CreatedAtRoute("SessionByName", new { sessionName = session.Name }, createdSession);
     }
 
@@ -38,6 +40,8 @@ public class SessionsController : ControllerBase
     public IActionResult UpdateSession(string sessionName, [FromBody] SessionForUpdateDto session)
     {
         _service.UpdateSession(sessionName, session);
+
+        _logger.LogInfo($"Session {sessionName} was updated to {session.SessionState} state");
 
         return NoContent();
     }
