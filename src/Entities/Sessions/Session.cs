@@ -1,8 +1,11 @@
+using Entities.Exceptions;
+
 namespace Entities.Sessions;
 
 public class Session : IClonable<Session>, IExpirable<Guid>
 {
     private SessionState _sessionState;
+    private int _numberOfUsers;
 
     public Session(string name) : this(name, 1) { }
     public Session(string name, int numberOfUsers)
@@ -14,7 +17,16 @@ public class Session : IClonable<Session>, IExpirable<Guid>
 
 
     public string Name { get; init; }
-    public int NumberOfUsers { get; init; }
+    public int NumberOfUsers
+    {
+        get => _numberOfUsers;
+        init
+        {
+            if (value <= 0)
+                throw new BadRequestException("Number of users must be greater then 0");
+            _numberOfUsers = value;
+        }
+    }
     public Guid ExpirationToken { get; private set; }
     public DateTime LastTimeModified { get; private set; } = DateTime.Now;
     public virtual SessionState SessionState
